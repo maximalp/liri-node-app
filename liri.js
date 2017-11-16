@@ -2,17 +2,24 @@ var request = require("request");
 var Twitter = require("twitter");
 var Spotify = require('node-spotify-api');
 
+
+
 var fs = require("fs");
 //var inquirer = require("inquirer");
 
-var twitterKeys = require("./keys.js");
+//var {twitterKeys, spotifyKeys} = require("./keys.js");
+//var spotifyKeys = require("./keys.js");
+
+var keys = require("./keys.js");
+
+
 
 var toDo = (process.argv[2]);
 
 
 
 var client = new Twitter(
-  twitterKeys
+  keys.twitterKeys
 );
 
 
@@ -24,7 +31,7 @@ switch (toDo) {
     break;
 
   case "spotify-this-song":
-    music();
+    spotifyId();
     break;
 
   case "movie-this":
@@ -52,4 +59,31 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
   console.log(error);
   }
 });
+};
+
+function spotifyId()
+{
+  var spotify = new Spotify({
+   id: keys.spotifyKeys.client_id,
+   secret: keys.spotifyKeys.client_secret
+});
+
+var songName = process.argv[3];
+if (!songName){
+        songName = "The Sign";
+      }
+
+spotify.search({ type: 'track', query: songName}, function(err, data) {
+  if (err) {
+    return console.log('Error occurred: ' + err);
+  }
+
+  console.log(data.tracks.items[0].album.artists[0].name);
+  console.log(data.tracks.items[0].name);
+  console.log(data.tracks.items[0].album.name);
+  console.log(data.tracks.items[0].album.href);
+
+});
+
+
 };
