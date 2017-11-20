@@ -140,7 +140,22 @@ function randomDo()
         var paramName = result[1];
         console.log(action);
         console.log(paramName);
-    });
+
+        switch (action) {
+               case "my-tweets":
+                 mytweets();
+                 break;
+
+               case "spotify-this-song":
+                 spotifyId(paramName);
+                 break;
+
+               case "movie-this":
+                 movie(paramName);
+                 break;
+    };
+
+  });
 
 
 
